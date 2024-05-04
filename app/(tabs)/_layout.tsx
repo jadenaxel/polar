@@ -1,59 +1,79 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import type { FC } from "react";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useContext, useEffect, useState } from "react";
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { Tabs } from "expo-router";
+import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+import { Sizes, Colors, LocalStorage } from "@/config";
+import { Actions, Context } from "@/Wrapper";
+import { Loader } from "@/components";
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
-}
+const Tab: FC = (): JSX.Element => {
+	const { state, dispatch }: any = useContext(Context);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+
+	const TextColor: any = state.darkMode ? Colors.dark.textColor : Colors.light.textColor;
+	const TintColor: any = state.darkMode ? Colors.dark.tint : Colors.light.tint;
+	const BackgroundColor: any = state.darkMode ? { backgroundColor: Colors.dark.backgroundColor } : { backgroundColor: Colors.light.backgroundColor };
+
+	const LoadDarkMode = async (): Promise<void> => {
+		const darkMode: boolean[] = await LocalStorage.getData("darkMode");
+		if (darkMode && darkMode.length > 0) dispatch({ type: Actions.DarkMode, payload: darkMode[0] });
+		setIsLoading(false);
+	};
+
+	useEffect(() => {
+		LoadDarkMode();
+	}, []);
+
+	if (isLoading) return <Loader />;
+
+	return (
+		<Tabs
+			screenOptions={{
+				headerShown: false,
+				tabBarInactiveTintColor: TextColor,
+				tabBarActiveTintColor: TintColor,
+				tabBarStyle: {
+					...BackgroundColor,
+					borderTopWidth: 0,
+				},
+				tabBarLabelStyle: {
+					fontSize: Sizes.ajustFontSize(14),
+				},
+			}}
+		>
+			<Tabs.Screen
+				name="index"
+				options={{
+					title: "Inicio",
+					tabBarIcon: () => <FontAwesome6 name="house-chimney" size={20} color={"#FF4141"} />,
+				}}
+			/>
+			<Tabs.Screen
+				name="speci"
+				options={{
+					title: "Especialidades",
+					tabBarIcon: () => <FontAwesome6 name="circle" size={20} color={"#FF4141"} />,
+				}}
+			/>
+			<Tabs.Screen
+				name="books"
+				options={{
+					title: "Libros",
+					tabBarIcon: () => <FontAwesome5 name="book-open" size={20} color={"#FF4141"} />,
+				}}
+			/>
+			<Tabs.Screen
+				name="movie"
+				options={{
+					title: "Videos",
+					tabBarIcon: () => <FontAwesome5 name="film" size={20} color={"#FF4141"} />,
+				}}
+			/>
+		</Tabs>
+	);
+};
+
+export default Tab;
