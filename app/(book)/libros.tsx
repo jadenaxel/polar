@@ -24,12 +24,12 @@ const Books: FC = (): JSX.Element => {
 		<SafeAreaView style={[styles.main, BackgroundColor]}>
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<Text style={[styles.title, { color: TextColor }]}>{data.title}</Text>
-				<View style={styles.imageContainer}>{data.img && <Image source={{ uri: data.img }} style={styles.image} />}</View>
+				<View style={styles.imageContainer}>{data.image && <Image source={{ uri: data.image?.asset?.url }} style={styles.image} />}</View>
 				{data.pdf && !error && (
 					<View style={{ alignItems: "center" }}>
 						<PDF
 							trustAllCerts={false}
-							source={{ uri: data.pdf, cache: true }}
+							source={{ uri: data.pdf?.asset?.url, cache: true }}
 							enablePaging
 							renderActivityIndicator={() => <Loader />}
 							style={styles.pdf}

@@ -16,6 +16,8 @@ const Especialidad: FC = (): JSX.Element => {
 
 	const data: any = state.especialidad;
 
+    console.log(data.pdf1.asset.url)
+
 	const TextColor: any = state.darkMode ? Colors.dark.textColor : Colors.light.textColor;
 	const BackgroundColor: any = state.darkMode ? { backgroundColor: Colors.dark.backgroundColor } : { backgroundColor: Colors.light.backgroundColor };
 
@@ -23,7 +25,7 @@ const Especialidad: FC = (): JSX.Element => {
 		<SafeAreaView style={[styles.main, BackgroundColor]}>
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<Text style={[styles.title, { color: TextColor }]}>{data.title}</Text>
-				<View style={styles.imageContainer}>{data.image && <Image source={{ uri: data.image }} style={styles.image} />}</View>
+				<View style={styles.imageContainer}>{data.image && <Image source={{ uri: data.image?.asset.url }} style={styles.image} />}</View>
 				<View style={styles.option}>
 					{data.pdf1 && (
 						<Pressable
@@ -45,7 +47,7 @@ const Especialidad: FC = (): JSX.Element => {
 				{activeOption && data.pdf1 && (
 					<PDF
 						trustAllCerts={false}
-						source={{ uri: data.pdf1, cache: true }}
+						source={{ uri: data.pdf1?.asset?.url, cache: true }}
 						enablePaging
 						renderActivityIndicator={() => <Loader />}
 						style={styles.pdf}
@@ -54,7 +56,7 @@ const Especialidad: FC = (): JSX.Element => {
 				{!activeOption && data.pdf2 && (
 					<PDF
 						trustAllCerts={false}
-						source={{ uri: data.pdf2, cache: true }}
+						source={{ uri: data.pdf2?.asset?.url, cache: true }}
 						enablePaging
 						renderActivityIndicator={() => <Loader />}
 						style={styles.pdf}

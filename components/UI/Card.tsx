@@ -7,7 +7,7 @@ import { Sizes } from "@/config";
 const Card: FC<any> = ({ item, textColor }: any): JSX.Element => {
 	return (
 		<View style={styles.main}>
-			<Image source={{ uri: item.img }} style={styles.image} resizeMode="cover" />
+			<Image source={{ uri: item.image?.asset?.url }} style={styles.image} resizeMode="cover" />
 			<Text style={[styles.title, { color: textColor }]} numberOfLines={2}>
 				{item.title}
 			</Text>

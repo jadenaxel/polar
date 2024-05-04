@@ -115,7 +115,7 @@ const Home: FC = (): JSX.Element => {
 									}}
 									style={styles.slider}
 								>
-									<Image src={item.item.image.asset.url} style={styles.image} resizeMode="cover" />
+									<Image src={item.item.image?.asset?.url} style={styles.image} resizeMode="cover" />
 								</Pressable>
 							);
 						}}
@@ -123,10 +123,10 @@ const Home: FC = (): JSX.Element => {
 				)}
 
 				{Slider && <Dot data={Slider.data} scrollX={scrollX} />}
-				{/* <View>
-					<Text style={styles.clases}>Clases Progrsivas</Text>
+				<View>
+					<Text style={[styles.clases, { color: TextColor }]}>Clases Progrsivas</Text>
 					<View style={styles.clasesContainer}>
-						{data
+						{Data.data
 							.sort((a: any, b: any) => a._createdAt.localeCompare(b._createdAt))
 							.map((item: any, i: number) => {
 								return (
@@ -143,7 +143,7 @@ const Home: FC = (): JSX.Element => {
 								);
 							})}
 					</View>
-				</View> */}
+				</View>
 			</ScrollView>
 		</SafeAreaView>
 	);
